@@ -1,0 +1,43 @@
+Global:
+1) Fix global size factor
+2) Check destructors and Release-functions
+3) Pass constant vector pointers instead of the vectors themselves (same for matrices)
+
+Direct3D:
+1) Manage states (and remove sprite->Begin(D3DX10_SPRITE_SAVE_STATE) in D3DConsole, HUD and Skybox)
+2) Fix depth-disable
+3) Handle device destruction and idle
+3) Add event handlers for Resize, LostDevice, ResetDevice, Update, ...
+
+Skybox:
+1) Check parralax equation (after Global.1 is done)
+2) Move alpha enable to OutputWindow (by fixing Direct3D.1)
+3) Lower infinite skybox and change color multiplicator to simulate sunset.
+4) Move SetProjectionTransform() to an event handler for device Reset (after Direct3D.4 is done)
+( 5) Add cloud animation )
+
+HUD:
+1) Finish HUD
+2) HUD -> Menu
+3) Texture or HUD -> Console sprites (Texture is currently preferred)
+
+
+>>> NEW <<<
+
+Global:
+1) Make Vector datatype as transit datatype (i.e. between ISDirect3D and ISHavok) Implement conevsion operators for D3DXVECTOR3, hkVector, ... on the fly like with Result (HResult.cpp, ...)
+2) Make new base class for objects created at a parent class. Use this base class for transit datatypes currently implemented with LPVOID.
+3) Remove device independent flag on texture creation. Create objects, textures, ... with OutputWindow::CreateXXX() for device dependent ressources and Direct3D::CreateXXX() for device independent ressources. (Update Direct3D::CastRay)
+
+XFile:
+1) Create class with methods for loading and saving (eventually support both fast and detailed loading)
+
+Direct3D:
+1) Remove move #include "ISHavoc" from global header (ISDirect3D.h) to individual local headers (Object.h, Camera.h, ...) and use LPVOID as transit datatype for entities.
+
+Object:
+1) Add another Load/Create method with an LPOBJECT as parameter for instancing (reuse vertex data, index data, materials, ...)
+2) Implement custom vertex formats
+
+Havok:
+1) Use custom vertex format for visualization when available

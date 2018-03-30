@@ -1,0 +1,193 @@
+%module ISForms
+%{
+#include <ISForms.h>
+%}
+
+
+
+//-----------------------------------------------------------------------------
+// ENUMS
+//-----------------------------------------------------------------------------
+enum CheckedState
+	{CS_UNCHECKED, CS_CHECKED, CS_INDETERMINATE};
+enum WindowState
+	{WS_NORMAL, WS_MINIMIZED, WS_MAXIMIZED};
+enum FormBorderStyle
+{
+	FBS_DEFAULT = 0x00CC0000/*WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME,
+	FBS_THINBORDER = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU,
+	FBS_NOBORDER = WS_OVERLAPPED,
+	FBS_ONLYBORDER = WS_THICKFRAME*/
+};
+
+
+//-----------------------------------------------------------------------------
+// STRUCTS
+//-----------------------------------------------------------------------------
+struct FormSettings
+{
+	String caption;
+	Point<int> windowpos;
+	Size<int> clientsize;
+	WindowState wndstate;
+	FormBorderStyle fbstyle;
+	bool istoolwindow, hasvscroll, hashscroll;
+	IWinForm* parent;
+	IMenuItem** mdiwindowmenu;
+	DWORD options;
+
+	FormSettings() : caption(""), windowpos(0, 0), clientsize(800, 600), wndstate(WS_NORMAL), fbstyle(FBS_DEFAULT),
+					 istoolwindow(false), hasvscroll(false), hashscroll(false), parent(NULL), mdiwindowmenu(NULL), options(0) {}
+};
+#define FS_CENTERTOSCREEN		0x1
+#define FS_MDICLIENT			0x2
+#define FS_MDICHILD				0x4
+
+
+typedef class IWinForm : public IIHasContextMenu
+{
+public:
+
+	virtual Result AddControl(IControl* ctrl) = 0;
+	virtual Result RemoveControl(IControl* ctrl) = 0;
+	virtual Result RemoveAllControls() = 0;
+	virtual Result CreateNumericUpDown(INumericUpDown** nud) = 0;
+	virtual Result CreateTrayIcon(const FilePath& iconfilename, ITrayIcon** trayicon) = 0;
+	virtual Result CreateToolbar(bool useliststyle, IToolbar** toolbar) = 0;
+	virtual void Show() = 0;
+	virtual void Hide() = 0;
+	virtual bool IsVisible() = 0;
+	virtual void BringToFront() = 0;
+	virtual HWND GetHwnd() = 0;
+	virtual Point<int> GetLocation() = 0;
+	virtual void SetLocation(Point<int> &val) = 0;
+	__declspec(property(get=GetLocation, put=SetLocation)) Point<int> Location;
+	virtual Size<int> GetClientSize() = 0;
+	virtual void SetClientSize(Size<int> &val) = 0;
+	__declspec(property(get=GetClientSize, put=SetClientSize)) Size<int> ClientSize;
+	virtual int GetTop() = 0;
+	virtual void SetTop(int val) = 0;
+	__declspec(property(get=GetTop, put=SetTop)) int Top;
+	virtual int GetLeft() = 0;
+	virtual void SetLeft(int val) = 0;
+	__declspec(property(get=GetLeft, put=SetLeft)) int Left;
+	virtual int GetClientWidth() = 0;
+	virtual void SetClientWidth(int val) = 0;
+	__declspec(property(get=GetClientWidth, put=SetClientWidth)) int ClientWidth;
+	virtual int GetClientHeight() = 0;
+	virtual void SetClientHeight(int val) = 0;
+	__declspec(property(get=GetClientHeight, put=SetClientHeight)) int ClientHeight;
+	virtual Rect<int> GetBounds() = 0;
+	virtual void SetBounds(const Rect<int>& val) = 0;
+	__declspec(property(get=GetBounds, put=SetBounds)) Rect<int> Bounds;
+	virtual Rect<int> GetClientBounds() = 0;
+	virtual void SetClientBounds(const Rect<int>& val) = 0;
+	__declspec(property(get=GetClientBounds, put=SetClientBounds)) Rect<int> ClientBounds;
+	virtual WindowState GetWindowState() = 0;
+	virtual WindowState SetWindowState(WindowState val) = 0;
+	__declspec(property(get=GetWindowState, put=SetWindowState)) WindowState WndState;
+	virtual Point<int> GetNormalLocation() = 0;
+	virtual ::Size<int> GetNormalClientSize() = 0;
+	virtual int GetNormalTop() = 0;
+	virtual int GetNormalLeft() = 0;
+	virtual int GetNormalClientWidth() = 0;
+	virtual int GetNormalClientHeight() = 0;
+	virtual FormBorderStyle GetFormBorderStyle() = 0;
+	virtual FormBorderStyle SetFormBorderStyle(FormBorderStyle val) = 0;
+	__declspec(property(get=GetFormBorderStyle, put=SetFormBorderStyle)) FormBorderStyle FBStyle;
+	virtual bool SetMaximizeBox(bool hasmaximizebox) = 0;
+	virtual bool GetMaximizeBox() = 0;
+	__declspec(property(get=GetMaximizeBox, put=SetMaximizeBox)) bool HasMaximizeBox;
+	virtual bool SetMinimizeBox(bool hasminimizebox) = 0;
+	virtual bool GetMinimizeBox() = 0;
+	__declspec(property(get=GetMinimizeBox, put=SetMinimizeBox)) bool HasMinimizeBox;
+	virtual const String& GetClassName() const = 0;
+	virtual Result EnableDragDrop() = 0;
+	virtual Result DisableDragDrop() = 0;
+	virtual Result CreateTitleMenu(IMenu** titlemenu) = 0;
+	virtual LPTOOLTIP GetTooltip() = 0;
+	virtual void SetMouseDownCallback(const MOUSEEVENT_CALLBACK cbk, LPVOID user) = 0;
+	virtual void SetMouseUpCallback(const MOUSEEVENT_CALLBACK cbk, LPVOID user) = 0;
+	virtual void SetMouseMoveCallback(const MOUSEEVENT_CALLBACK cbk, LPVOID user) = 0;
+	virtual void SetMouseDoubleClickCallback(const MOUSEEVENT_CALLBACK cbk, LPVOID user) = 0;
+	virtual void SetMouseWheelCallback(const MOUSEEVENT_CALLBACK cbk, LPVOID user) = 0;
+	virtual void SetPaintCallback(const PAINT_CALLBACK cbk, LPVOID user) = 0;
+	virtual void SetDragEnterCallback(const DRAGDROP_CALLBACK dragentercbk, LPVOID user) = 0;
+	virtual void SetDragOverCallback(const DRAGDROP_CALLBACK dragovercbk, LPVOID user) = 0;
+	virtual void SetDragLeaveCallback(const DRAGLEAVE_CALLBACK dragleavecbk, LPVOID user) = 0;
+	virtual void SetDropCallback(const DRAGDROP_CALLBACK dropcbk, LPVOID user) = 0;
+	virtual void SetFormResizeCallback(const FORMRESIZE_CALLBACK fresizecbk, LPVOID user) = 0;
+	virtual void SetFormSizeChangedCallback(const FORMSIZECHANGED_CALLBACK fsizechangedcbk, LPVOID user) = 0;
+	virtual void SetFormMovingCallback(const FORMMOVING_CALLBACK fmovingcbk, LPVOID user) = 0;
+	virtual void SetFormMovedCallback(const FORMMOVED_CALLBACK fmovedcbk, LPVOID user) = 0;
+	virtual void SetFormClosingCallback(const FORMCLOSING_CALLBACK fclosingcbk, LPVOID user) = 0;
+	virtual void SetFormClosedCallback(const FORMCLOSED_CALLBACK fclosedcbk, LPVOID user) = 0;
+	virtual void Close(bool* cancel = NULL) = 0;
+}* LPWINFORM;
+
+typedef class IForms
+{
+public:
+	HFONT defaultfont;
+
+	virtual HINSTANCE GetInstance() = 0;
+	virtual LPWINFORM GetWinForm(size_t index) = 0;
+	virtual HWND GetHwnd(size_t index) = 0;
+	virtual HWND GetMDIClientHwnd(size_t index) = 0;
+	virtual int GetNumForms() = 0;
+	virtual bool VisualStylesEnabled() = 0;
+
+	virtual void Sync(SyncedPtr<Engine>& exeeng, SyncedPtr<IDirect3D>& exed3d, SyncedPtr<IOpenGL>& exeogl, SyncedPtr<IHavok>& exehvk, SyncedPtr<IGuiFactory>& exegui, \
+					  SyncedPtr<IForms>& exefms, SyncedPtr<IDirectIpt>& exedip, SyncedPtr<IWinIpt>& exewip, SyncedPtr<IFFmpeg>& exeffm, SyncedPtr<ICryptoPP>& execpp, \
+					  SyncedPtr<IID3Lib>& exeid3, SyncedPtr<IWinAudio>& exewad, SyncedPtr<IXAudio2>& exexa2, SyncedPtr<IWinMidi>& exemid, SyncedPtr<IWinSock>& exewsk, \
+					  SyncedPtr<IAsyncWorkers>& exeaws, SyncedPtr<ISQLite>& exesql, SyncedPtr<IHaruPdf>& exepdf, SyncedPtr<IRayTracer>& exertr, SyncedPtr<IPbrt>& exepbrt, \
+					  SyncedPtr<IPythonScriptEngine>& exepse, SyncedPtr<Console>& execle) = 0;
+	//%typemap(imtype) HINSTANCE "System.IntPtr"
+	virtual Result Init(HINSTANCE instance) = 0;
+	virtual Result CreateForm(FormSettings *settings, const String* classname = NULL, IWinForm** winform = NULL) = 0;
+	virtual Result CreateForm(HWND handle, IWinForm** winform = NULL) = 0;
+	virtual void CloseForm(size_t index, bool* cancel = NULL) = 0;
+	virtual void CloseFormByHwnd(HWND wnd, bool* cancel = NULL) = 0;
+	virtual void ShowAll() = 0;
+	virtual void CloseAll(bool* cancel = NULL) = 0;
+	virtual void EnableVisualStates() = 0;
+	virtual void DisableVisualStates() = 0;
+	virtual void CallOnGainFocus(HWND wnd) = 0;
+	virtual void CallOnLoseFocus(HWND wnd) = 0;
+	virtual void CallOnKeyDown(DWORD vkey) = 0;
+	virtual void CallOnKeyUp(DWORD vkey) = 0;
+	virtual void OnPaint(HWND wnd) = 0;
+	virtual void OnMouseDown(HWND wnd, const MouseEventArgs& args) = 0;
+	virtual void OnMouseUp(HWND wnd, const MouseEventArgs& args) = 0;
+	virtual void OnMouseMove(HWND wnd, const MouseEventArgs& args) = 0;
+	virtual void OnMouseDoubleClick(HWND wnd, const MouseEventArgs& args) = 0;
+	virtual void OnMouseWheel(HWND wnd, const MouseEventArgs& args) = 0;
+	virtual void OnMouseLeave(HWND wnd, const MouseEventArgs& args) = 0;
+	virtual LRESULT OnFormClosing(HWND wnd) = 0;
+	virtual bool OnFormResize(HWND wnd, Size<UINT> size, WindowState wndstate) = 0;
+	virtual void OnFormSizing(HWND wnd, Rect<int>* bounds, byte sizeedge) = 0;
+	virtual void OnFormMoving(HWND wnd, Rect<int>* bounds) = 0;
+	virtual void OnFormEnterSizeMove(HWND wnd) = 0;
+	virtual void OnFormExitSizeMove(HWND wnd) = 0;
+	virtual void OnButtonMessage(HWND wnd, HWND handle, WORD notifycode) = 0;
+	virtual void OnMenuMessage(HWND wnd, WORD menuid) = 0;
+	virtual void OnTrayIconMessage(HWND wnd, LPARAM lparam) = 0;
+	virtual void OnNotifyMessage(HWND wnd, const NMHDR* nmhdr) = 0;
+	virtual void OnFormContextMenuMessage(HWND wnd) = 0;
+	virtual void RegisterForFormDependence(IFormDependend* cls) = 0;
+	virtual void DeregisterFromFormDependence(IFormDependend* cls) = 0;
+	virtual void RegisterForKeyboardMonitoring(IKeyboardMonitoring* cls) = 0;
+	virtual void DeregisterFromKeyboardMonitoring(IKeyboardMonitoring* cls) = 0;
+	virtual void Release() = 0;
+}* LPFORMS;
+
+%extend IForms {
+	IWinForm* XCreateForm(FormSettings *settings) {
+		// CreateForm Wrapper
+		IWinForm* ret;
+		$self->CreateForm(settings, NULL, &ret);
+		return ret;
+	}
+};
+
+extern "C" __declspec(dllexport) LPFORMS __cdecl CreateForms();

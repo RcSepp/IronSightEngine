@@ -1,0 +1,6 @@
+del *.cs *.c *.cxx *.obj *.dll *.exp *.ilk *.lib *.pdb *.idb
+swig -csharp -c++ IronSightEngine.i
+copy *.cs K:\C#\SwigTest\SwigTest\
+cl -c IronSightEngine_wrap.cxx -I../include/ -I"D:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include" /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D "_WINDLL" /D "_MBCS" /Gm- /EHsc /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fp"Release\ISMath.pch" /Gd /analyze- /errorReport:queue /MD
+link IronSightEngine_wrap.obj /OUT:"ISMath.dll" /NOLOGO /DLL "K:\C++\IronSightEngine\lib\x86\ISEngine.lib" "K:\C++\IronSightEngine\dll\x86\ISForms.lib" "K:\C++\IronSightEngine\lib\x86\ISMath.lib" "K:\C++\IronSightEngine\dll\x86\ISDirect3D.lib" "K:\C++\IronSightEngine\dll\x86\ISDirectInput.lib" "K:\C++\IronSightEngine\dll\x86\ISHavok.lib" "K:\C++\IronSightEngine\dll\x86\ISWinMidi.lib" "kernel32.lib" "user32.lib" "gdi32.lib" "winspool.lib" "comdlg32.lib" "advapi32.lib" "shell32.lib" "ole32.lib" "oleaut32.lib" "uuid.lib" "odbc32.lib" "odbccp32.lib" /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /MACHINE:X86 /ERRORREPORT:QUEUE
+copy *.dll K:\C#\SwigTest\SwigTest\bin\Release\

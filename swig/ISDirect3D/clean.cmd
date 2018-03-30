@@ -1,0 +1,1 @@
+del *.cs *.c *.cxx *.obj *.dll *.exp *.ilk *.lib *.pdb *.idb

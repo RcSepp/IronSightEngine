@@ -1,0 +1,4 @@
+CBC_CTS
+CFB <- best choice
+OFB <- for precomputation without ciphertext; same key + same iv = same encryption (that XOR'ed to ciphertext = plaintext) <=> feedback uses neither plain text nor cipher text
+CTR <- -||-
